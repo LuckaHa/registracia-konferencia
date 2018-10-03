@@ -5,6 +5,8 @@ import java.util.List;
 
 public class Participant {
 	
+	public static final double SINGLE_ROOM_FEE = 75;
+	
 	private String name;
 	private String surname;
 	private String email;
@@ -37,6 +39,7 @@ public class Participant {
 				price = workshop.getPriceFullLate();
 			}
 		}
+		if (singleRoom) price += SINGLE_ROOM_FEE;
 		if (companions != null) {
 			for(Companion c : companions) {
 				price += c.getPrice();

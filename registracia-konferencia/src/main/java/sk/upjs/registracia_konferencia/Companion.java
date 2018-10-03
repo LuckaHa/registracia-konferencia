@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 public class Companion {
 	
-	public static final double SINGLE_ROOM_FEE = 75;
 	public static final double[] COMPANION_FEES = new double[] {0, 60, 110, 165, 210};
 	public static final double BANKET_FEE = 20;
 	public static final double TSHIRT_FEE = 5;

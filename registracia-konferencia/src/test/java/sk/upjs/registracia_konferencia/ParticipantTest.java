@@ -42,7 +42,6 @@ class ParticipantTest {
 		Participant petra = new Participant();
 		petra.setEarlyRegistrated(false);
 		petra.setWorkshop(cidm);
-		System.out.println("Jakubov VIRUS");
 		petra.setStudent(false);
 		petra.setSingleRoom(false);
 		petra.setCach(false);
