@@ -5,8 +5,14 @@ import java.util.List;
 
 public class Participant {
 	
+	@Override
+	public String toString() {
+		return "Participant [id=" + id + " name=" + name + ", surname=" + surname + ", email=" + email + "]";
+	}
+
 	public static final double SINGLE_ROOM_FEE = 75;
 	
+	private Long id; // prideli mu ulozisko
 	private String name;
 	private String surname;
 	private String email;
@@ -46,6 +52,14 @@ public class Participant {
 			}
 		}
 		return price;
+	}
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public String getName() {
