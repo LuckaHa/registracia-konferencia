@@ -1,43 +1,87 @@
 package sk.upjs.registracia_konferencia;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.IOException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckMenuItem;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class ParticipantListController {
 
-    private ParticipantDAO participantDAO = new ParticipantDAO();
-    private ObservableList<ParticipantFXModel> participantsModel;
-
-    @FXML
-    private ListView<ParticipantFXModel> participantsListView; // listener
+    private ParticipantDAO participantDAO = ParticipantDAOFactory.INSTANCE.getParticipantDAO();
+    private ObservableList<Participant> participantsModel;
+    private Map<String, BooleanProperty> columnsVisibility = new LinkedHashMap<>(); // HashMap prehadzuje poradie
+    private ObjectProperty<Participant> selectedPatricipant = new SimpleObjectProperty<>(); // ked sa zmeni referencia na objekt, nova udalost
     
     @FXML
-    private TableView<ParticipantFXModel> participantsTableView; // listener
+    private TableView<Participant> participantsTableView; // listener
+    
+    @FXML
+    private Button editParticipantButton;
  
     @FXML
     void initialize() {
+    	// TOTO je ak pouzivame ParticipantFXModel
     	// participantDAO.getAll() vrati len list participantov, my chceme list modelov participantov
-    	List<ParticipantFXModel> models = new ArrayList<>();
+    	/*List<ParticipantFXModel> models = new ArrayList<>();
     	for (Participant p : participantDAO.getAll()) {
 			models.add(new ParticipantFXModel(p));
-		}
+		}*/
     	
-    	participantsModel = FXCollections.observableArrayList(models);
-    	participantsListView.setItems(participantsModel);
+    	participantsModel = FXCollections.observableArrayList(participantDAO.getAll());
     	
-    	TableColumn<ParticipantFXModel, Long> idCol = new TableColumn<>("ID");
-    	TableColumn<ParticipantFXModel, String> nameCol = new TableColumn<>("Meno");
-    	TableColumn<ParticipantFXModel, String> surnameCol = new TableColumn<>("Priezvisko");
-    	TableColumn<ParticipantFXModel, String> emailCol = new TableColumn<>("E-mail");
+    	// OKNO EDITACIE
+    	editParticipantButton.setOnAction(new EventHandler<ActionEvent>() {	
+			@Override
+			public void handle(ActionEvent event) {
+				try {
+					ParticipantEditController editController = new ParticipantEditController(selectedPatricipant.get());
+					FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ParticipantEdit.fxml"));
+					fxmlLoader.setController(editController);
+					Parent rootPane = fxmlLoader.load();
+					Scene scene = new Scene(rootPane);
+					
+					// vytvorit modalne okno - neda sa z neho vratit, kym nie su dokoncene zmeny
+					Stage dialog = new Stage();
+					dialog.setTitle("Úprava účastníka");
+					dialog.setScene(scene);
+					dialog.initModality(Modality.APPLICATION_MODAL);
+					dialog.showAndWait(); // cokolvek za tymto prikazom, az ked sa zavrie okno
+					
+					// prekreslit ulozene zmeny
+					participantsModel.setAll(participantDAO.getAll());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+    	
+    	TableColumn<Participant, Long> idCol = new TableColumn<>("ID");
+    	TableColumn<Participant, String> nameCol = new TableColumn<>("Meno");
+    	TableColumn<Participant, String> surnameCol = new TableColumn<>("Priezvisko");
+    	TableColumn<Participant, String> emailCol = new TableColumn<>("E-mail");
     	
     	idCol.setCellValueFactory(new PropertyValueFactory<>("id")); //PropertyValueFactory vytvori getter id
     	nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
@@ -46,6 +90,13 @@ public class ParticipantListController {
     	
     	emailCol.setCellFactory(TextFieldTableCell.forTableColumn());
     	emailCol.setEditable(true);
+    	// emailCol.setVisible(false); // na tvrdo urobit neviditelnym
+    	
+    	// VOLBA VIDITELNYCH STLPCOV - vytvorime model viditelnosti pre kazdy stlpec
+    	columnsVisibility.put("ID", idCol.visibleProperty());
+    	columnsVisibility.put("Meno", nameCol.visibleProperty());
+    	columnsVisibility.put("Priezvisko", surnameCol.visibleProperty());
+    	columnsVisibility.put("E-mail", emailCol.visibleProperty());
     	
     	participantsTableView.getColumns().add(idCol);
     	participantsTableView.getColumns().add(nameCol);
@@ -53,5 +104,25 @@ public class ParticipantListController {
     	participantsTableView.getColumns().add(emailCol);
     	
     	participantsTableView.setItems(participantsModel);
+    	participantsTableView.setEditable(true);
+    	
+    	// MENU - prehlad moznosti je v Scene Builderi
+    	ContextMenu contextMenu = new ContextMenu();
+    	for (Entry<String, BooleanProperty> entry : columnsVisibility.entrySet()) {
+    		CheckMenuItem menuItem = new CheckMenuItem(entry.getKey()); // zisti, ci je viditelny
+    		menuItem.selectedProperty().bindBidirectional(entry.getValue()); // prepojenie odskrtnutia so skutocnou viditelnostou
+        	contextMenu.getItems().add(menuItem);
+		}	
+    	participantsTableView.setContextMenu(contextMenu); // vyberieme, kde ma byt
+    	
+    	// VOLBA UCASTNIKA
+    	participantsTableView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Participant>() {
+
+			@Override
+			public void changed(ObservableValue<? extends Participant> observable, Participant oldValue,
+					Participant newValue) {
+				selectedPatricipant.set(newValue);
+			}
+		});
     }
 }
