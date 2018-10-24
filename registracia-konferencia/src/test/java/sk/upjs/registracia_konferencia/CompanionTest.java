@@ -6,6 +6,10 @@ import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.Test;
 
+import entity.Companion;
+import entity.CompanionCategory;
+import entity.Tshirt;
+
 class CompanionTest {
 
 	@Test

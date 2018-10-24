@@ -1,5 +1,6 @@
 package sk.upjs.registracia_konferencia;
 
+import entity.Participant;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 

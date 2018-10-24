@@ -1,7 +1,9 @@
-package sk.upjs.registracia_konferencia;
+package persistent;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import entity.Participant;
 
 /**
  * trieda na vykonavanie CRUD operacii

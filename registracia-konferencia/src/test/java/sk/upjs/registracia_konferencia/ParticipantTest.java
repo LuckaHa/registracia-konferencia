@@ -8,6 +8,11 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import entity.Companion;
+import entity.CompanionCategory;
+import entity.Participant;
+import entity.Workshop;
+
 class ParticipantTest {
 	
 	Workshop cidm;

@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import entity.Participant;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -27,10 +28,12 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import persistent.ParticipantDAO;
+import persistent.DAOFactory;
 
 public class ParticipantListController {
 
-    private ParticipantDAO participantDAO = ParticipantDAOFactory.INSTANCE.getParticipantDAO();
+    private ParticipantDAO participantDAO = DAOFactory.INSTANCE.getParticipantDAO();
     private ObservableList<Participant> participantsModel;
     private Map<String, BooleanProperty> columnsVisibility = new LinkedHashMap<>(); // HashMap prehadzuje poradie
     private ObjectProperty<Participant> selectedPatricipant = new SimpleObjectProperty<>(); // ked sa zmeni referencia na objekt, nova udalost

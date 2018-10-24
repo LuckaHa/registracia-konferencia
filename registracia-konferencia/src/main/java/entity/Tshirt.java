@@ -1,4 +1,4 @@
-package sk.upjs.registracia_konferencia;
+package entity;
 
 public enum Tshirt {
 	XS,
