@@ -1,14 +1,15 @@
-package entity;
+package sk.upjs.registracia_konferencia.entity;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Workshop {
 	
 	private Long id;
 	private String name;
-	private LocalDateTime start;
-	private LocalDateTime end;
-	private double priceFull;
+	private LocalDate start;
+	private LocalDate end;
+	private double priceFull; 
 	private double priceStudent;
 	private double priceFullLate;
 	private double priceStudentLate;
@@ -25,16 +26,16 @@ public class Workshop {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public LocalDateTime getStart() {
+	public LocalDate getStart() {
 		return start;
 	}
-	public void setStart(LocalDateTime start) {
-		this.start = start;
+	public void setStart(LocalDate localDate) {
+		this.start = localDate;
 	}
-	public LocalDateTime getEnd() {
+	public LocalDate getEnd() {
 		return end;
 	}
-	public void setEnd(LocalDateTime end) {
+	public void setEnd(LocalDate end) {
 		this.end = end;
 	}
 	public double getPriceFull() {

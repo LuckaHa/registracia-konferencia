@@ -1,4 +1,4 @@
-package persistent;
+package sk.upjs.registracia_konferencia.persistent;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import com.mysql.cj.jdbc.MysqlDataSource;
 
-import entity.Workshop;
+import sk.upjs.registracia_konferencia.entity.Workshop;
 
 public enum DAOFactory {
 	INSTANCE;

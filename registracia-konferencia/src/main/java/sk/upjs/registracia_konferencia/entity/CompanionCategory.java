@@ -1,4 +1,4 @@
-package entity;
+package sk.upjs.registracia_konferencia.entity;
 
 public enum CompanionCategory {
 	CHILD_UNDER_6,
