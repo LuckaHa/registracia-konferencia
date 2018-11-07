@@ -62,5 +62,10 @@ public class Workshop {
 	public void setPriceStudentLate(double priceStudentLate) {
 		this.priceStudentLate = priceStudentLate;
 	}
+	
+	@Override
+	public String toString() {
+		return "Workshop [name=" + name + "]";
+	}
 
 }

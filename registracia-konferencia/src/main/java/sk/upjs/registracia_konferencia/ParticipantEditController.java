@@ -1,13 +1,13 @@
 package sk.upjs.registracia_konferencia;
 
-import entity.Participant;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import persistent.ParticipantDAO;
-import persistent.DAOFactory;
+import sk.upjs.registracia_konferencia.entity.Participant;
+import sk.upjs.registracia_konferencia.persistent.DAOFactory;
+import sk.upjs.registracia_konferencia.persistent.ParticipantDAO;
 
 public class ParticipantEditController {
 	

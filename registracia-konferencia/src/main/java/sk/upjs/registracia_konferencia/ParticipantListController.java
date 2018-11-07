@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import entity.Participant;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -28,8 +27,9 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import persistent.ParticipantDAO;
-import persistent.DAOFactory;
+import sk.upjs.registracia_konferencia.entity.Participant;
+import sk.upjs.registracia_konferencia.persistent.DAOFactory;
+import sk.upjs.registracia_konferencia.persistent.ParticipantDAO;
 
 public class ParticipantListController {
 
@@ -37,6 +37,7 @@ public class ParticipantListController {
     private ObservableList<Participant> participantsModel;
     private Map<String, BooleanProperty> columnsVisibility = new LinkedHashMap<>(); // HashMap prehadzuje poradie
     private ObjectProperty<Participant> selectedPatricipant = new SimpleObjectProperty<>(); // ked sa zmeni referencia na objekt, nova udalost
+    private ObjectProperty<Participant> selectedWorkshop = new SimpleObjectProperty<>();
     
     @FXML
     private TableView<Participant> participantsTableView; // listener
@@ -59,25 +60,12 @@ public class ParticipantListController {
     	editParticipantButton.setOnAction(new EventHandler<ActionEvent>() {	
 			@Override
 			public void handle(ActionEvent event) {
-				try {
-					ParticipantEditController editController = new ParticipantEditController(selectedPatricipant.get());
-					FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ParticipantEdit.fxml"));
-					fxmlLoader.setController(editController);
-					Parent rootPane = fxmlLoader.load();
-					Scene scene = new Scene(rootPane);
-					
-					// vytvorit modalne okno - neda sa z neho vratit, kym nie su dokoncene zmeny
-					Stage dialog = new Stage();
-					dialog.setTitle("Úprava účastníka");
-					dialog.setScene(scene);
-					dialog.initModality(Modality.APPLICATION_MODAL);
-					dialog.showAndWait(); // cokolvek za tymto prikazom, az ked sa zavrie okno
-					
-					// prekreslit ulozene zmeny
-					participantsModel.setAll(participantDAO.getAll());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				ParticipantEditController editController = new ParticipantEditController(selectedPatricipant.get());
+				showModalWindow(editController, "ParticpiantList.fxml");
+				// to iste pre WorkshopEdit ... skontroluj podla Gurskeho
+				WorkshopEditController wEditController = new WorkshopEditController();
+				showModalWindow(wEditController, "WorkshopEdit.fxml");
+				participantsModel.setAll(participantDAO.getAll());
 			}
 		});
     	
@@ -124,8 +112,40 @@ public class ParticipantListController {
 			@Override
 			public void changed(ObservableValue<? extends Participant> observable, Participant oldValue,
 					Participant newValue) {
+				if (newValue == null) {
+					editParticipantButton.setDisable(true);
+				} else {
+					editParticipantButton.setDisable(false);
+				}
 				selectedPatricipant.set(newValue);
 			}
 		});
     }
+
+	private void showModalWindow(Object controller, String fxml) {
+		/*ParticipantEditController editController = new ParticipantEditController(selectedPatricipant.get());
+		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ParticipantEdit.fxml"));
+		
+		WorkshopEditController editController = new WorkshopEditController(selectedPatricipant.get());*/
+		try {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(fxml));
+			
+			fxmlLoader.setController(controller);
+			Parent rootPane = fxmlLoader.load();
+			Scene scene = new Scene(rootPane);
+			
+			// vytvorit modalne okno - neda sa z neho vratit, kym nie su dokoncene zmeny
+			Stage dialog = new Stage();
+			dialog.setTitle("Úprava účastníka");
+			dialog.setScene(scene);
+			dialog.initModality(Modality.APPLICATION_MODAL);
+			dialog.showAndWait(); // cokolvek za tymto prikazom, az ked sa zavrie okno
+			
+			// prekreslit ulozene zmeny
+			participantsModel.setAll(participantDAO.getAll());
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

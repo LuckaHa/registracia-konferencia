@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="670.0" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="editWorkshopsButton" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="530.0" prefWidth="670.0" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Label layoutX="196.0" layoutY="14.0" prefHeight="42.0" prefWidth="279.0" text="Administrácia konferencie" textAlignment="CENTER" AnchorPane.leftAnchor="196.0" AnchorPane.rightAnchor="195.0" AnchorPane.topAnchor="14.0">
          <font>
@@ -17,7 +17,8 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
       </Label>
-      <TableView fx:id="participantsTableView" layoutX="43.0" layoutY="98.0" prefHeight="390.0" prefWidth="586.0" AnchorPane.bottomAnchor="42.0" AnchorPane.leftAnchor="42.0" AnchorPane.rightAnchor="42.0" AnchorPane.topAnchor="98.0" />
-      <Button fx:id="editParticipantButton" layoutX="42.0" layoutY="56.0" mnemonicParsing="false" text="Upraviť účastníka" />
+      <TableView fx:id="participantsTableView" layoutX="43.0" layoutY="98.0" prefHeight="390.0" prefWidth="586.0" AnchorPane.bottomAnchor="42.0" AnchorPane.leftAnchor="42.0" AnchorPane.rightAnchor="42.0" AnchorPane.topAnchor="103.0" />
+      <Button fx:id="editParticipantButton" disable="true" layoutX="42.0" layoutY="66.0" mnemonicParsing="false" text="Upraviť účastníka" />
+      <Button fx:id="editWorkshopsButton" layoutX="159.0" layoutY="66.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="141.0" text="Spravovať workshopy" />
    </children>
 </AnchorPane>

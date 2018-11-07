@@ -1,8 +1,8 @@
 package sk.upjs.registracia_konferencia;
 
-import entity.Participant;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import sk.upjs.registracia_konferencia.entity.Participant;
 
 /**
  * editovatelny model Participanta - menit sa da email
