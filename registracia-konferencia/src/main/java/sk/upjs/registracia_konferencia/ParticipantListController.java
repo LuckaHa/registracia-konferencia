@@ -46,6 +46,9 @@ public class ParticipantListController {
     private Button editParticipantButton;
  
     @FXML
+    private Button editWorkshopsButton;
+    
+    @FXML
     void initialize() {
     	// TOTO je ak pouzivame ParticipantFXModel
     	// participantDAO.getAll() vrati len list participantov, my chceme list modelov participantov
@@ -68,6 +71,15 @@ public class ParticipantListController {
 				participantsModel.setAll(participantDAO.getAll());
 			}
 		});
+    	
+    	// OKNO EDITACIE workshopu
+    	editWorkshopsButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				WorkshopEditController editController = new WorkshopEditController();            
+				showModalWindow(editController, "WorkshopEdit.fxml");
+			}
+    	});
     	
     	TableColumn<Participant, Long> idCol = new TableColumn<>("ID");
     	TableColumn<Participant, String> nameCol = new TableColumn<>("Meno");

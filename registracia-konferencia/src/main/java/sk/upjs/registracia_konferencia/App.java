@@ -7,7 +7,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class App extends Application {
-
+// ja
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		ParticipantListController mainController = new ParticipantListController();
